@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN"><!--packages="com.keruyun.loyalty.commons.bizlog.plugin">-->
+    <properties>
+        <property name="LOG_FILE_PATTERN">
+            <![CDATA[
+            %d{yyyy-MM-dd HH:mm:ss } [%t] %-5level %logger{36} - %msg
+        ]]>
+        </property>
+        <property name="retain">14</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_FILE_PATTERN}"/>
+        </Console>
+        <RollingRandomAccessFile name="RollingFile"
+                                 fileName="runningse.log"
+                                 filePattern="runningse.%d{yyyyMMdd}.log">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_FILE_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
