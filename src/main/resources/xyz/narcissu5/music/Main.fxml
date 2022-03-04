@@ -9,23 +9,26 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 
-<GridPane fx:id="mainPane" alignment="center" hgap="10" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.narcissu5.music.controller.MainController">
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<GridPane fx:id="mainPane" alignment="center" hgap="10" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="10" xmlns="http://javafx.com/javafx/17"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.narcissu5.music.controller.MainController">
     <columnConstraints>
-        <ColumnConstraints fillWidth="true" />
+        <ColumnConstraints fillWidth="true"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
+        <RowConstraints/>
+        <RowConstraints/>
     </rowConstraints>
     <children>
         <TilePane GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <Button text="打开文件" onAction="#openDirectory" />
-            <Button text="网易云" />
+            <Button text="打开文件" onAction="#openDirectory"/>
+            <Button text="网易云"/>
             <GridPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </GridPane.margin>
         </TilePane>
-        <TableView fx:id="songTbl" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" editable="true">
+        <TableView fx:id="songTbl" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
         </TableView>
 
     </children>

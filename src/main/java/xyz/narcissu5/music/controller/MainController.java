@@ -44,25 +44,24 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        songTbl.setEditable(true);
+
         TableColumn<Song, String> column = new TableColumn<>("歌名");
+        column.setEditable(true);
         column.setCellValueFactory(new PropertyValueFactory<>("title"));
         column.setCellFactory(TextFieldTableCell.<Song>forTableColumn());
+        column.setOnEditCommit(e -> e.getRowValue().setTitle(e.getNewValue()));
         songTbl.getColumns().add(column);
         column = new TableColumn<>("专辑");
+        column.setEditable(true);
         column.setCellValueFactory(new PropertyValueFactory<>("album"));
         column.setCellFactory(TextFieldTableCell.<Song>forTableColumn());
         songTbl.getColumns().add(column);
         column = new TableColumn<>("歌手");
+        column.setEditable(true);
         column.setCellValueFactory(new PropertyValueFactory<>("artists"));
         column.setCellFactory(TextFieldTableCell.<Song>forTableColumn());
         songTbl.getColumns().add(column);
-
-//        songTbl.setItems(songs);
-    }
-
-    @FXML
-    public void start(ActionEvent actionEvent) {
-
     }
 
     @FXML
@@ -80,7 +79,7 @@ public class MainController {
         executorService.submit(() -> {
             try {
                 mainModel.openDirectory(directory, s -> Platform.runLater(() -> songTbl.getItems().add(s)));
-            } catch (CannotReadException|TagException|InvalidAudioFrameException|ReadOnlyFileException|IOException e) {
+            } catch (CannotReadException | TagException | InvalidAudioFrameException | ReadOnlyFileException | IOException e) {
                 e.printStackTrace();
             }
         });
