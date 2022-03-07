@@ -4,7 +4,6 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.SupportedFileFormat;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
@@ -41,17 +40,8 @@ public class MainModel {
             Tag tag = audioFile.getTag();
             Song song = new Song(tag.getFirst(FieldKey.TITLE),
                     tag.getFirst(FieldKey.ALBUM), tag.getFirst(FieldKey.ARTIST), audioFile);
-            song.setWriter(this::writeBack);
             System.out.printf("%s %s %s %s\n", filePath, song.getTitle(), song.getAlbum(), song.getArtists());
             callback.accept(song);
-        }
-    }
-
-    public void writeBack(Song song) {
-        try {
-            song.getFile().commit();
-        } catch (CannotWriteException e) {
-            e.printStackTrace();
         }
     }
 }

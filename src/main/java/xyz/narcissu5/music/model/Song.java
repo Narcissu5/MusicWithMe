@@ -3,6 +3,7 @@ package xyz.narcissu5.music.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 
@@ -10,11 +11,11 @@ import java.util.function.Consumer;
 
 public class Song {
 
-    private final SimpleStringProperty title = new SimpleStringProperty();
+    public final SimpleStringProperty title = new SimpleStringProperty();
 
-    private final SimpleStringProperty album = new SimpleStringProperty();
+    public final SimpleStringProperty album = new SimpleStringProperty();
 
-    private final SimpleStringProperty artists = new SimpleStringProperty();
+    public final SimpleStringProperty artists = new SimpleStringProperty();
 
     private AudioFile file;
 
@@ -73,14 +74,16 @@ public class Song {
         return file;
     }
 
-    public void setWriter(Consumer<Song> writer) {
-        this.writer = writer;
-        title.addListener(this::onChange);
-        album.addListener(this::onChange);
-        artists.addListener(this::onChange);
-    }
-
-    private void onChange(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        writer.accept(this);
+    public void commit() {
+        try {
+            file.getTag().setField(FieldKey.TITLE, title.get());
+            file.getTag().setField(FieldKey.ALBUM, album.get());
+            file.getTag().setField(FieldKey.ARTIST, artists.get());
+            file.commit();
+        } catch (FieldDataInvalidException e) {
+            e.printStackTrace();
+        } catch (CannotWriteException e) {
+            e.printStackTrace();
+        }
     }
 }
