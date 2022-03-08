@@ -40,7 +40,7 @@ public class MainModel {
             Tag tag = audioFile.getTag();
             Song song = new Song(tag.getFirst(FieldKey.TITLE),
                     tag.getFirst(FieldKey.ALBUM), tag.getFirst(FieldKey.ARTIST), audioFile);
-            System.out.printf("%s %s %s %s\n", filePath, song.getTitle(), song.getAlbum(), song.getArtists());
+            System.out.printf("%s %s %s %s\n", filePath, song.title.get(), song.album.get(), song.artists.get());
             callback.accept(song);
         }
     }

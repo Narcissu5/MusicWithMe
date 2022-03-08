@@ -1,15 +1,16 @@
 package xyz.narcissu5.music.controller;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
@@ -24,6 +25,7 @@ import xyz.narcissu5.music.model.Song;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,6 +41,8 @@ public class MainController {
 
     EditorController editorCtl = new EditorController();
 
+    BatchEditorController batchEditorCtl = new BatchEditorController();
+
     @FXML
     GridPane mainPane;
 
@@ -49,6 +53,8 @@ public class MainController {
     TableView<Song> songTbl;
 
     Stage editorWindow;
+
+    Stage batchEditorWindow;
 
     @FXML
     public void initialize() {
@@ -99,7 +105,6 @@ public class MainController {
             editorWindow.setTitle("编辑元信息");
             editorWindow.setScene(new Scene(root));
             editorWindow.initModality(Modality.WINDOW_MODAL);
-            editorCtl.setStage(editorWindow);
         }
         editorCtl.setSong(song);
         return editorWindow;
@@ -116,5 +121,31 @@ public class MainController {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void openBatchEditor(ActionEvent actionEvent) {
+        if(!songTbl.getSelectionModel().isEmpty()) {
+            getBatchEditorWindow(songTbl.getSelectionModel().getSelectedItems()).show();
+        }
+    }
+
+    private Stage getBatchEditorWindow(Collection<Song> songs) {
+        if(batchEditorWindow == null) {
+            Parent root = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(Main.class.getResource("BatchEditor.fxml"));
+                loader.setController(batchEditorCtl);
+                root = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            batchEditorWindow = new Stage();
+            batchEditorWindow.setTitle("批量编辑");
+            batchEditorWindow.setScene(new Scene(root));
+            batchEditorWindow.initModality(Modality.WINDOW_MODAL);
+        }
+        batchEditorCtl.setSongs(songs);
+        return batchEditorWindow;
     }
 }

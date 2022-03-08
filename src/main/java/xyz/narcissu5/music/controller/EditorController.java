@@ -1,16 +1,12 @@
 package xyz.narcissu5.music.controller;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import xyz.narcissu5.music.model.Song;
 
-public class EditorController {
-
-    Stage stage;
+public class EditorController extends PopupBaseController {
 
     public final SimpleStringProperty file = new SimpleStringProperty();
 
@@ -37,10 +33,6 @@ public class EditorController {
         return song;
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
     public void setSong(Song song) {
         this.song = song;
         title.textProperty().bindBidirectional(song.title);
@@ -52,10 +44,10 @@ public class EditorController {
 
     public void save(ActionEvent event) {
         song.commit();
-        stage.close();
+        closePop(event);
     }
 
     public void close(ActionEvent event) {
-        stage.close();
+        closePop(event);
     }
 }

@@ -1,73 +1,68 @@
 package xyz.narcissu5.music.model;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 
-import java.util.function.Consumer;
-
 public class Song {
 
-    public final SimpleStringProperty title = new SimpleStringProperty();
+    public SimpleStringProperty title = new SimpleStringProperty();
 
-    public final SimpleStringProperty album = new SimpleStringProperty();
+    public SimpleStringProperty titleProperty() {
+        return title;
+    }
 
-    public final SimpleStringProperty artists = new SimpleStringProperty();
+    public SimpleStringProperty album = new SimpleStringProperty();
+
+    public SimpleStringProperty albumProperty() {
+        return album;
+    }
+
+    public SimpleStringProperty artists = new SimpleStringProperty();
+
+    public SimpleStringProperty artistsProperty() {
+        return artists;
+    }
 
     private AudioFile file;
 
-    private Consumer<Song> writer;
-
     public Song() {
+        this.title.addListener(new Listener(FieldKey.TITLE));
+        this.album.addListener(new Listener(FieldKey.ALBUM));
+        this.artists.addListener(new Listener(FieldKey.ARTIST));
     }
 
     public Song(String title, String album, String artists, AudioFile file) {
+        this();
         this.title.set(title);
         this.album.set(album);
         this.artists.set(artists);
         this.file = file;
     }
 
-    public String getTitle() {
-        return title.get();
-    }
+    private class Listener implements ChangeListener<String> {
 
-    public void setTitle(String title) {
-        try {
-            file.getTag().setField(FieldKey.TITLE, title);
-        } catch (FieldDataInvalidException e) {
-            e.printStackTrace();
+        private final FieldKey fieldKey;
+
+        public Listener(FieldKey fieldKey) {
+            this.fieldKey = fieldKey;
         }
-        this.title.set(title);
-    }
 
-    public String getAlbum() {
-        return album.get();
-    }
-
-    public void setAlbum(String album) {
-        try {
-            file.getTag().setField(FieldKey.ALBUM, album);
-        } catch (FieldDataInvalidException e) {
-            e.printStackTrace();
+        @Override
+        public void changed(ObservableValue<? extends String> observable,
+                            String oldValue, String newValue) {
+            try {
+                if (file != null) {
+                    file.getTag().setField(fieldKey, newValue);
+                }
+            } catch (FieldDataInvalidException e) {
+                e.printStackTrace();
+            }
         }
-        this.album.set(album);
-    }
-
-    public String getArtists() {
-        return artists.get();
-    }
-
-    public void setArtists(String artists) {
-        try {
-            file.getTag().setField(FieldKey.ARTIST, artists);
-        } catch (FieldDataInvalidException e) {
-            e.printStackTrace();
-        }
-        this.artists.set(artists);
     }
 
     public AudioFile getFile() {
