@@ -1,0 +1,32 @@
+plugins {
+    id "org.openjfx.javafxplugin" version "0.0.12"
+    id "org.beryx.jlink" version "2.24.4"
+}
+
+repositories {
+    maven { url "https://maven.aliyun.com/repository/central" }
+    mavenCentral()
+}
+
+application {
+    mainModule = "musicwithme"
+    mainClass = "xyz.narcissu5.music.Main"
+}
+
+javafx {
+    version = "17"
+    modules = ["javafx.controls", "javafx.fxml"]
+}
+
+dependencies {
+    implementation "org.jaudiotagger:jaudiotagger:2.0.1"
+}
+
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'MusicWithMe'
+        noConsole = true
+    }
+    addExtraDependencies("javafx")
+}
